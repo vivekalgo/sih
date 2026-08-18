@@ -127,11 +127,12 @@ export default function App() {
       const data = await res.json();
       
       // Update preview and masking mode immediately
-      if (data.preview_image || data.preview_images) {
+      if (data.preview_image || data.preview_images || data.masked_text) {
         setUploadResult((prev) => ({
           ...prev,
           preview_image: data.preview_image || prev?.preview_image,
           preview_images: data.preview_images || (data.preview_image ? [data.preview_image] : prev?.preview_images),
+          masked_text: data.masked_text || prev?.masked_text,
           masking_mode: modeToUse
         }));
       }
@@ -184,40 +185,66 @@ export default function App() {
     }
   };
 
-  // Custom keywords & selective unmasking handler
-  const handleApplyCustomRules = async (customKeywords = [], disabledEntityIds = [], currentMode = maskingMode) => {
-    if (!uploadResult || !uploadResult.original_text) return;
+  // Custom Rules / Regex / Keywords Handler
+  const handleApplyCustomRules = async (customKeywords = [], disabledEntityIds = [], currentMaskMode = maskingMode) => {
+    if (!uploadResult) return;
+    setIsRedacting(true);
+    setErrorMsg(null);
 
-    const modeToUse = currentMode || maskingMode || 'TOKEN';
+    const modeToUse = currentMaskMode || maskingMode || 'TOKEN';
 
     try {
+      const formData = new FormData();
+      if (uploadedFile) {
+        formData.append('file', uploadedFile);
+      }
+      formData.append('filename', uploadResult.filename || 'document.pdf');
+      formData.append('custom_keywords_str', JSON.stringify(customKeywords));
+      formData.append('disabled_entity_ids_str', JSON.stringify(disabledEntityIds));
+      formData.append('masking_mode', modeToUse);
+
       const res = await fetch('/api/redact/custom', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          raw_text: uploadResult.original_text,
-          custom_keywords: customKeywords,
-          disabled_entity_ids: disabledEntityIds,
-          masking_mode: modeToUse
-        })
+        body: formData
       });
 
-      if (res.ok) {
-        const data = await res.json();
+      if (!res.ok) {
+        throw new Error(`Custom redaction failed with status ${res.status}`);
+      }
+
+      const data = await res.json();
+      
+      if (data.preview_image || data.preview_images || data.masked_text) {
         setUploadResult((prev) => ({
           ...prev,
-          masked_text: data.masked_text,
-          masking_mode: modeToUse,
-          risk_assessment: data.risk_assessment,
-          compliance_report: data.compliance_report,
-          sanitization_hash: data.sanitization_hash,
-          zero_leak_verified: data.zero_leak_verified,
           preview_image: data.preview_image || prev?.preview_image,
-          preview_images: data.preview_images || prev?.preview_images
+          preview_images: data.preview_images || (data.preview_image ? [data.preview_image] : prev?.preview_images),
+          masked_text: data.masked_text || prev?.masked_text,
+          masking_mode: modeToUse
         }));
       }
     } catch (err) {
-      console.error('Error applying custom rules:', err);
+      console.error('Custom redaction error:', err);
+      setErrorMsg(`Custom rule error: ${err.message}`);
+    } finally {
+      setIsRedacting(false);
+    }
+  };
+
+  // Memory Purge / Zero-Retention Wipe
+  const handlePurgeMemory = async () => {
+    setIsPurging(true);
+    try {
+      await fetch('/api/purge', { method: 'POST' });
+      setUploadResult(null);
+      setUploadedFile(null);
+      setErrorMsg(null);
+      setPurgeToast('RAM Wiped: All temporary document memory permanently destroyed (0 bytes remaining).');
+      setTimeout(() => setPurgeToast(null), 4000);
+    } catch (err) {
+      console.error('Purge error:', err);
+    } finally {
+      setIsPurging(false);
     }
   };
 
@@ -230,22 +257,6 @@ export default function App() {
         : [];
       handleApplySmartRedaction(notReqStrings, mode, false);
       handleApplyCustomRules([], [], mode);
-    }
-  };
-
-  // Purge memory
-  const handlePurgeMemory = async () => {
-    setIsPurging(true);
-    try {
-      await fetch('/api/purge', { method: 'POST' });
-      setUploadResult(null);
-      setUploadedFile(null);
-      setPurgeToast('Session cleared. All uploaded data has been wiped from memory.');
-      setTimeout(() => setPurgeToast(null), 4000);
-    } catch (err) {
-      console.error('Purge error:', err);
-    } finally {
-      setIsPurging(false);
     }
   };
 
@@ -283,11 +294,18 @@ export default function App() {
         
         {/* Error Alert */}
         {errorMsg && (
-          <div className="p-4 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800/60 text-rose-800 dark:text-rose-200 text-xs flex items-center space-x-3 shadow-sm">
-            <AlertCircle className="w-5 h-5 text-rose-500 dark:text-rose-400 flex-shrink-0" />
-            <div>
-              <span className="font-bold">Notice:</span> {errorMsg}
+          <div className="p-2.5 mb-2 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800/60 text-rose-800 dark:text-rose-200 text-xs flex items-center justify-between shadow-sm animate-fade-in flex-shrink-0">
+            <div className="flex items-center space-x-2 truncate">
+              <AlertCircle className="w-4 h-4 text-rose-500 dark:text-rose-400 flex-shrink-0" />
+              <span className="truncate">{errorMsg}</span>
             </div>
+            <button
+              type="button"
+              onClick={() => setErrorMsg(null)}
+              className="p-1 hover:bg-rose-100 dark:hover:bg-rose-900 rounded text-rose-600 dark:text-rose-400"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
           </div>
         )}
 

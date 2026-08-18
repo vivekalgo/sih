@@ -597,6 +597,17 @@ async def redact_endpoint(
         entities = [e for e in entities if e.raw_value.lower() in target_lower_set or any(t in e.raw_value.lower() for t in target_lower_set)]
     redact_res = redactor.redact_text(input_text, entities, masking_mode=masking_mode or "TOKEN")
     
+    if return_json or request.query_params.get("return_json") == "true":
+        return {
+            "status": "success",
+            "filename": f"masked_{target_filename}",
+            "redacted_count": len(entities),
+            "masking_mode": masking_mode or "TOKEN",
+            "masked_text": redact_res.get("masked_text", ""),
+            "byte_size": len(redact_res.get("masked_text", "").encode("utf-8")),
+            "sanitization_hash": redact_res.get("sanitization_hash")
+        }
+
     return Response(
         content=redact_res["masked_text"].encode("utf-8"),
         media_type="text/plain; charset=utf-8",
