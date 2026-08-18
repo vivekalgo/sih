@@ -241,11 +241,11 @@ export default function FloatingChatWidget({ hasDocument, filename = 'document.p
       )}
 
       {/* 2. FLOATING ACTION BUTTON (FAB) TRIGGER */}
-      <div className="fixed bottom-6 right-6 z-50">
+      <div className="fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-40">
         <button
           type="button"
           onClick={() => setIsOpen((prev) => !prev)}
-          className={`relative group flex items-center space-x-2.5 px-4 py-3 rounded-full shadow-2xl transition-all duration-300 ${
+          className={`relative group flex items-center space-x-2 px-3 py-2 sm:px-4 sm:py-3 rounded-full shadow-2xl transition-all duration-300 ${
             isOpen
               ? 'bg-slate-900 dark:bg-slate-800 text-white ring-2 ring-cyan-500/50 scale-95'
               : 'bg-gradient-to-r from-cyan-600 via-indigo-600 to-purple-600 text-white hover:scale-105 hover:shadow-cyan-500/30'
