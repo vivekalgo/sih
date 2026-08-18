@@ -5,11 +5,19 @@ Strictly memory-only (RAM buffer) execution with zero temporary files on disk.
 """
 
 import io
-import numpy as np
 from typing import Dict, Any, List, Optional
 from PIL import Image
 import pymupdf  # Real PyMuPDF
-from rapidocr_onnxruntime import RapidOCR
+
+try:
+    import numpy as np
+except ImportError:
+    np = None
+
+try:
+    from rapidocr_onnxruntime import RapidOCR
+except ImportError:
+    RapidOCR = None
 
 
 class DocumentExtractor:
@@ -21,8 +29,12 @@ class DocumentExtractor:
     def __init__(self):
         # Initialize RapidOCR ONNX model in RAM
         try:
-            self.ocr_engine = RapidOCR()
-            self._ocr_ready = True
+            if RapidOCR is not None:
+                self.ocr_engine = RapidOCR()
+                self._ocr_ready = True
+            else:
+                self.ocr_engine = None
+                self._ocr_ready = False
         except Exception as e:
             print(f"[DocumentExtractor] OCR init warning: {e}")
             self.ocr_engine = None
