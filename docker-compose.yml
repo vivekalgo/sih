@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  # PostgreSQL with pgvector extension for local vector indexing
+  postgres-vector:
+    image: pgvector/pgvector:pg16
+    container_name: privacyguard-db
+    environment:
+      POSTGRES_DB: privacyguard
+      POSTGRES_USER: privacy_admin
+      POSTGRES_PASSWORD: secure_local_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgvector_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  # Python FastAPI Zero-Retention Privacy Engine
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: privacyguard-backend
+    environment:
+      - ZERO_RETENTION_MODE=true
+      - DATABASE_URL=postgresql://privacy_admin:secure_local_password@postgres-vector:5432/privacyguard
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres-vector
+    restart: unless-stopped
+
+  # Node.js Stream Proxy Gateway
+  node-gateway:
+    build:
+      context: ./node_service
+      dockerfile: Dockerfile
+    container_name: privacyguard-gateway
+    environment:
+      - FASTAPI_URL=http://backend:8000
+      - PORT=3001
+    ports:
+      - "3001:3001"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  # React.js Web Admin Portal
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: privacyguard-frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  pgvector_data:
