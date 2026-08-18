@@ -304,10 +304,10 @@ Confidential Note: Cleared background verification for rental lease.`;
   };
 
   return (
-    <div className="space-y-3 sm:space-y-5 animate-fade-in max-w-6xl mx-auto flex flex-col w-full">
+    <div className="flex-1 min-h-0 flex flex-col space-y-2 sm:space-y-3.5 animate-fade-in max-w-6xl mx-auto w-full overflow-hidden">
       
-      {/* 1. TOP PROCESS STEPPER BAR (Sticky on top) */}
-      <div className="sticky top-16 z-30 bg-slate-50/95 dark:bg-[#07090e]/95 backdrop-blur-md pb-1">
+      {/* 1. TOP PROCESS STEPPER BAR (Fixed at top) */}
+      <div className="flex-shrink-0">
         <StepProgress
           currentStep={currentStep}
           maxUnlockedStep={maxUnlockedStep}
@@ -319,10 +319,10 @@ Confidential Note: Cleared background verification for rental lease.`;
           STEP 1: SELECT PURPOSE / USE CASE
           ========================================================================= */}
       {currentStep === 1 && (
-        <div className="glass-card rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-xl bg-white/95 dark:bg-[#0b0f19]/90 overflow-hidden flex flex-col animate-fade-in relative">
+        <div className="glass-card rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-xl bg-white/95 dark:bg-[#0b0f19]/90 overflow-hidden flex flex-col flex-1 min-h-0 animate-fade-in">
           
-          {/* Step Header */}
-          <div className="p-3.5 sm:p-4 pb-2 sm:pb-3 border-b border-slate-100 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-900/40 space-y-1">
+          {/* Step Header (Fixed at top of card) */}
+          <div className="flex-shrink-0 p-3 sm:p-4 pb-2 sm:pb-2.5 border-b border-slate-100 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-900/40 space-y-0.5">
             <div className="flex items-center justify-between">
               <div className="inline-flex items-center space-x-1.5 px-2 py-0.5 rounded-full bg-cyan-50 dark:bg-cyan-950/60 border border-cyan-300 dark:border-cyan-500/30 text-cyan-700 dark:text-cyan-300 text-[10px] sm:text-[11px] font-semibold">
                 <Sparkles className="w-3 h-3" />
@@ -332,17 +332,17 @@ Confidential Note: Cleared background verification for rental lease.`;
                 Tailored for Global & Indian PII Regulations
               </span>
             </div>
-            <h2 className="text-sm sm:text-lg font-extrabold text-slate-900 dark:text-white tracking-tight">
+            <h2 className="text-xs sm:text-base font-extrabold text-slate-900 dark:text-white tracking-tight">
               Why are you sharing this document?
             </h2>
-            <p className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400">
+            <p className="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400">
               Select your use case. We automatically customize what data is safe to keep.
             </p>
           </div>
 
-          {/* Scrollable Purpose Grid Container with generous bottom padding so the last item is 100% visible */}
-          <div className="p-3 sm:p-4 pb-32 sm:pb-4 overflow-y-auto max-h-[calc(100dvh-280px)] sm:max-h-[460px] space-y-2.5">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3">
+          {/* Scrollable Purpose Grid Container (Middle flex area - Only this scrolls!) */}
+          <div className="flex-1 min-h-0 p-2.5 sm:p-4 overflow-y-auto space-y-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-2.5">
               {purposeOptions.map((opt) => {
                 const Icon = opt.icon;
                 const isSelected = (purpose || 'General Sharing') === opt.id;
@@ -351,7 +351,7 @@ Confidential Note: Cleared background verification for rental lease.`;
                   <div
                     key={opt.id}
                     onClick={() => setPurpose(opt.id)}
-                    className={`p-3 sm:p-3.5 rounded-2xl border text-left cursor-pointer transition-all duration-150 relative flex flex-col justify-between group ${
+                    className={`p-2.5 sm:p-3 rounded-2xl border text-left cursor-pointer transition-all duration-150 relative flex flex-col justify-between group ${
                       isSelected
                         ? 'bg-gradient-to-br from-cyan-50 to-blue-50/80 dark:from-cyan-950/70 dark:to-slate-900 border-cyan-500 text-slate-900 dark:text-white shadow-sm ring-2 ring-cyan-500/40'
                         : 'bg-white dark:bg-slate-900/60 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-slate-300 dark:hover:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-900'
@@ -359,7 +359,7 @@ Confidential Note: Cleared background verification for rental lease.`;
                   >
                     <div className="space-y-1">
                       <div className="flex items-center justify-between">
-                        <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center transition-colors ${
+                        <div className={`w-7 h-7 rounded-lg flex items-center justify-center transition-colors ${
                           isSelected 
                             ? 'bg-cyan-600 text-white shadow-sm shadow-cyan-600/30' 
                             : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 group-hover:text-cyan-500'
@@ -387,7 +387,7 @@ Confidential Note: Cleared background verification for rental lease.`;
                         </p>
                       </div>
 
-                      <p className="text-[10.5px] text-slate-500 dark:text-slate-400 leading-snug line-clamp-2">
+                      <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-snug line-clamp-2">
                         {opt.detail}
                       </p>
                     </div>
@@ -395,12 +395,10 @@ Confidential Note: Cleared background verification for rental lease.`;
                 );
               })}
             </div>
-            {/* Additional bottom spacer for mobile scrolling clearance */}
-            <div className="h-6 sm:hidden" />
           </div>
 
-          {/* DOCKED / FIXED BOTTOM ACTION BAR (100% Fixed at bottom of viewport on mobile) */}
-          <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/98 dark:bg-[#0a0e19]/98 backdrop-blur-xl border-t border-slate-200 dark:border-slate-800 p-3 sm:p-4 sm:static sm:bg-slate-50/95 sm:dark:bg-[#0c101a]/95 sm:rounded-b-3xl shadow-[0_-10px_30px_rgba(0,0,0,0.15)] sm:shadow-none flex items-center justify-between gap-3">
+          {/* DOCKED BOTTOM ACTION BAR (Directly inside card layout - Always 100% visible on screen!) */}
+          <div className="flex-shrink-0 p-3 sm:p-3.5 bg-slate-50/95 dark:bg-[#0c101a]/95 backdrop-blur-md border-t border-slate-200/90 dark:border-slate-800 flex items-center justify-between gap-3">
             <div className="text-xs text-slate-600 dark:text-slate-400 hidden sm:flex items-center gap-1.5">
               <span>Selected Purpose:</span>
               <strong className="text-cyan-600 dark:text-cyan-400 font-bold px-2 py-0.5 rounded bg-cyan-50 dark:bg-cyan-950/80 border border-cyan-300 dark:border-cyan-700/50">
@@ -411,7 +409,7 @@ Confidential Note: Cleared background verification for rental lease.`;
             <button
               type="button"
               onClick={() => setCurrentStep(2)}
-              className="w-full sm:w-auto ml-auto px-6 sm:px-8 py-3.5 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold text-xs sm:text-sm shadow-xl shadow-cyan-600/30 flex items-center justify-center space-x-2 transition-all active:scale-95"
+              className="w-full sm:w-auto ml-auto px-6 sm:px-8 py-3 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold text-xs sm:text-sm shadow-md shadow-cyan-600/25 flex items-center justify-center space-x-2 transition-all active:scale-95"
             >
               <span>Next: Upload Document</span>
               <ArrowRight className="w-4 h-4" />
@@ -425,13 +423,13 @@ Confidential Note: Cleared background verification for rental lease.`;
           STEP 2: UPLOAD DOCUMENT / TEXT
           ========================================================================= */}
       {currentStep === 2 && (
-        <div className="glass-card rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-xl bg-white/95 dark:bg-[#0b0f19]/90 overflow-hidden flex flex-col animate-fade-in max-w-4xl mx-auto w-full relative">
+        <div className="glass-card rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-xl bg-white/95 dark:bg-[#0b0f19]/90 overflow-hidden flex flex-col flex-1 min-h-0 animate-fade-in max-w-4xl mx-auto w-full">
           
           {/* Step Header */}
-          <div className="p-3.5 sm:p-4 pb-2 sm:pb-3 border-b border-slate-100 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-900/40 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div className="flex-shrink-0 p-3 sm:p-4 pb-2 sm:pb-2.5 border-b border-slate-100 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-900/40 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
               <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400">Step 2: Ingestion</span>
-              <h2 className="text-sm sm:text-lg font-extrabold text-slate-900 dark:text-white">
+              <h2 className="text-xs sm:text-base font-extrabold text-slate-900 dark:text-white">
                 Upload or Paste Document
               </h2>
             </div>
@@ -445,7 +443,7 @@ Confidential Note: Cleared background verification for rental lease.`;
           </div>
 
           {/* Upload Area Scroll Container */}
-          <div className="p-3.5 sm:p-5 pb-32 sm:pb-5 overflow-y-auto max-h-[calc(100dvh-280px)] sm:max-h-[460px] space-y-3.5">
+          <div className="flex-1 min-h-0 p-3 sm:p-4 overflow-y-auto space-y-3">
             
             {/* Mode Switcher */}
             <div className="flex items-center space-x-2 bg-slate-100 dark:bg-slate-900/90 p-1 rounded-xl border border-slate-200 dark:border-slate-800 w-fit shadow-sm">
@@ -484,7 +482,7 @@ Confidential Note: Cleared background verification for rental lease.`;
                 onDragOver={handleDragOver}
                 onDrop={handleDrop}
                 onClick={() => !isProcessing && fileInputRef.current?.click()}
-                className={`border-2 border-dashed rounded-2xl p-5 sm:p-8 text-center cursor-pointer transition-all duration-150 relative group ${
+                className={`border-2 border-dashed rounded-2xl p-4 sm:p-6 text-center cursor-pointer transition-all duration-150 relative group ${
                   isDragOver
                     ? 'border-cyan-500 bg-cyan-50/50 dark:bg-cyan-950/30'
                     : 'border-slate-300 dark:border-slate-700/80 bg-slate-50/60 dark:bg-slate-900/40 hover:border-cyan-500/70 hover:bg-cyan-50/20'
@@ -499,17 +497,17 @@ Confidential Note: Cleared background verification for rental lease.`;
                   disabled={isProcessing}
                 />
 
-                <div className="space-y-2.5 max-w-sm mx-auto">
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center mx-auto text-cyan-600 dark:text-cyan-400 group-hover:scale-105 transition-transform">
+                <div className="space-y-2 max-w-sm mx-auto">
+                  <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center mx-auto text-cyan-600 dark:text-cyan-400 group-hover:scale-105 transition-transform">
                     {isProcessing ? (
-                      <Loader2 className="w-5 h-5 sm:w-6 sm:h-6 animate-spin" />
+                      <Loader2 className="w-5 h-5 animate-spin" />
                     ) : (
-                      <UploadCloud className="w-5 h-5 sm:w-6 sm:h-6" />
+                      <UploadCloud className="w-5 h-5" />
                     )}
                   </div>
 
                   <div className="space-y-0.5">
-                    <h3 className="text-xs sm:text-base font-bold text-slate-900 dark:text-white">
+                    <h3 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white">
                       {isProcessing ? 'Scanning & Detecting PII...' : 'Tap or drop your document here'}
                     </h3>
                     <p className="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400">
@@ -536,9 +534,9 @@ Confidential Note: Cleared background verification for rental lease.`;
 
             {/* Paste Box */}
             {activeUploadTab === 'paste' && (
-              <form onSubmit={handlePastedSubmit} className="space-y-2.5">
+              <form onSubmit={handlePastedSubmit} className="space-y-2">
                 <textarea
-                  rows={5}
+                  rows={4}
                   placeholder="Paste text containing Aadhaar, PAN, SSN, phone numbers, or credit card details here..."
                   value={pastedText}
                   onChange={(e) => setPastedText(e.target.value)}
@@ -556,7 +554,7 @@ Confidential Note: Cleared background verification for rental lease.`;
             )}
 
             {/* Demo Sample Quick Action */}
-            <div className="p-2.5 rounded-xl bg-slate-100/80 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 text-[11px] sm:text-xs text-slate-600 dark:text-slate-400 flex flex-col sm:flex-row items-center justify-between gap-1.5 text-center sm:text-left">
+            <div className="p-2.5 rounded-xl bg-slate-100/80 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 text-[10.5px] sm:text-xs text-slate-600 dark:text-slate-400 flex flex-col sm:flex-row items-center justify-between gap-1.5 text-center sm:text-left">
               <span>Don't have a document handy?</span>
               <button
                 type="button"
@@ -569,8 +567,8 @@ Confidential Note: Cleared background verification for rental lease.`;
 
           </div>
 
-          {/* DOCKED / FIXED BOTTOM ACTION BAR */}
-          <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/98 dark:bg-[#0a0e19]/98 backdrop-blur-xl border-t border-slate-200 dark:border-slate-800 p-3 sm:p-4 sm:static sm:bg-slate-50/95 sm:dark:bg-[#0c101a]/95 sm:rounded-b-3xl shadow-[0_-10px_30px_rgba(0,0,0,0.15)] sm:shadow-none flex items-center justify-between gap-3">
+          {/* DOCKED BOTTOM ACTION BAR */}
+          <div className="flex-shrink-0 p-3 sm:p-3.5 bg-slate-50/95 dark:bg-[#0c101a]/95 backdrop-blur-md border-t border-slate-200/90 dark:border-slate-800 flex items-center justify-between gap-3">
             <button
               type="button"
               onClick={() => setCurrentStep(1)}
@@ -592,10 +590,10 @@ Confidential Note: Cleared background verification for rental lease.`;
           STEP 3: CHOOSE REDACTION & MASKING OPTIONS
           ========================================================================= */}
       {currentStep === 3 && uploadResult && (
-        <div className="glass-card rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-xl bg-white/95 dark:bg-[#0b0f19]/90 overflow-hidden flex flex-col animate-fade-in max-w-5xl mx-auto w-full relative">
+        <div className="glass-card rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-xl bg-white/95 dark:bg-[#0b0f19]/90 overflow-hidden flex flex-col flex-1 min-h-0 animate-fade-in max-w-5xl mx-auto w-full">
           
           {/* Step Header */}
-          <div className="p-3.5 sm:p-4 pb-2 sm:pb-3 border-b border-slate-100 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-900/40 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div className="flex-shrink-0 p-3 sm:p-4 pb-2 sm:pb-2.5 border-b border-slate-100 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-900/40 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
               <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400">Step 3: Redaction Strategy</span>
               <h2 className="text-xs sm:text-base font-extrabold text-slate-900 dark:text-white flex items-center gap-1.5 truncate">
@@ -610,10 +608,10 @@ Confidential Note: Cleared background verification for rental lease.`;
           </div>
 
           {/* Masking Options Scroll Container */}
-          <div className="p-3 sm:p-4 pb-32 sm:pb-4 overflow-y-auto max-h-[calc(100dvh-280px)] sm:max-h-[460px] space-y-3.5">
+          <div className="flex-1 min-h-0 p-3 sm:p-4 overflow-y-auto space-y-3">
             
             {/* 1. Masking Strategy Selector */}
-            <div className="space-y-1.5">
+            <div className="space-y-1">
               <span className="text-[11px] font-bold uppercase tracking-wider text-slate-900 dark:text-white flex items-center gap-1.5">
                 <Sparkles className="w-3 h-3 text-cyan-600 dark:text-cyan-400" />
                 Choose How to Hide Information
@@ -673,7 +671,7 @@ Confidential Note: Cleared background verification for rental lease.`;
               <button
                 type="button"
                 onClick={() => setShowAdvanced((prev) => !prev)}
-                className="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-900/60 flex items-center justify-between text-[11px] font-bold text-slate-700 dark:text-slate-300"
+                className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-900/60 flex items-center justify-between text-[11px] font-bold text-slate-700 dark:text-slate-300"
               >
                 <span className="flex items-center gap-1.5">
                   <SlidersHorizontal className="w-3 h-3 text-cyan-600 dark:text-cyan-400" />
@@ -729,8 +727,8 @@ Confidential Note: Cleared background verification for rental lease.`;
 
           </div>
 
-          {/* DOCKED / FIXED BOTTOM ACTION BAR */}
-          <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/98 dark:bg-[#0a0e19]/98 backdrop-blur-xl border-t border-slate-200 dark:border-slate-800 p-3 sm:p-4 sm:static sm:bg-slate-50/95 sm:dark:bg-[#0c101a]/95 sm:rounded-b-3xl shadow-[0_-10px_30px_rgba(0,0,0,0.15)] sm:shadow-none flex items-center justify-between gap-3">
+          {/* DOCKED BOTTOM ACTION BAR */}
+          <div className="flex-shrink-0 p-3 sm:p-3.5 bg-slate-50/95 dark:bg-[#0c101a]/95 backdrop-blur-md border-t border-slate-200/90 dark:border-slate-800 flex items-center justify-between gap-3">
             <button
               type="button"
               onClick={() => setCurrentStep(2)}
@@ -744,7 +742,7 @@ Confidential Note: Cleared background verification for rental lease.`;
               type="button"
               onClick={handleGenerateFinalOutput}
               disabled={isRedacting}
-              className="px-5 sm:px-8 py-3.5 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold text-xs sm:text-sm shadow-xl shadow-cyan-600/30 flex items-center justify-center space-x-1.5 transition-all active:scale-95"
+              className="px-5 sm:px-8 py-3 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold text-xs sm:text-sm shadow-md shadow-cyan-600/25 flex items-center justify-center space-x-1.5 transition-all active:scale-95"
             >
               {isRedacting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Eye className="w-4 h-4" />}
               <span>Generate Clean Document</span>
@@ -759,10 +757,10 @@ Confidential Note: Cleared background verification for rental lease.`;
           STEP 4: FINAL CLEAN OUTPUT & DOWNLOAD
           ========================================================================= */}
       {currentStep === 4 && uploadResult && (
-        <div className="space-y-3 sm:space-y-4 animate-fade-in">
+        <div className="flex-1 min-h-0 flex flex-col space-y-2 sm:space-y-3 animate-fade-in overflow-hidden">
           
           {/* Top Document Header Bar */}
-          <div className="flex flex-wrap items-center justify-between gap-2 p-3 sm:p-3.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl text-xs text-slate-700 dark:text-slate-300 shadow-xs">
+          <div className="flex-shrink-0 flex flex-wrap items-center justify-between gap-2 p-2.5 sm:p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl text-xs text-slate-700 dark:text-slate-300 shadow-xs">
             <div className="flex flex-wrap items-center gap-1.5">
               <span className="flex items-center gap-1 font-bold text-slate-900 dark:text-white text-xs sm:text-sm truncate">
                 <FileCheck2 className="w-4 h-4 text-emerald-500 flex-shrink-0" />
@@ -778,7 +776,7 @@ Confidential Note: Cleared background verification for rental lease.`;
               <button
                 type="button"
                 onClick={() => setCurrentStep(3)}
-                className="px-2.5 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-[11px] font-semibold transition-colors flex items-center space-x-1"
+                className="px-2.5 py-1 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-[11px] font-semibold transition-colors flex items-center space-x-1"
               >
                 <SlidersHorizontal className="w-3 h-3" />
                 <span>Tweak</span>
@@ -787,7 +785,7 @@ Confidential Note: Cleared background verification for rental lease.`;
               <button
                 type="button"
                 onClick={handleStartOver}
-                className="px-2.5 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-[11px] font-semibold transition-colors flex items-center space-x-1"
+                className="px-2.5 py-1 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-[11px] font-semibold transition-colors flex items-center space-x-1"
               >
                 <RotateCcw className="w-3 h-3" />
                 <span>Start Over</span>
@@ -796,14 +794,14 @@ Confidential Note: Cleared background verification for rental lease.`;
           </div>
 
           {/* 2-Column Split Workspace */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 pb-24 sm:pb-0">
+          <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-12 gap-3 overflow-y-auto">
             
             {/* Left Column: Multi-page Visual Document Preview (7 cols) */}
-            <div className="lg:col-span-7 space-y-3">
-              <div className="glass-card rounded-2xl p-3 sm:p-4 border border-slate-200 dark:border-slate-800 space-y-2.5 shadow-md bg-white dark:bg-slate-900/80">
+            <div className="lg:col-span-7 space-y-2.5">
+              <div className="glass-card rounded-2xl p-3 sm:p-4 border border-slate-200 dark:border-slate-800 space-y-2 shadow-md bg-white dark:bg-slate-900/80">
                 
                 {/* Header with Page Jump & Zoom Controls */}
-                <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-slate-600 dark:text-slate-400 font-medium pb-2 border-b border-slate-200 dark:border-slate-800/80">
+                <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-slate-600 dark:text-slate-400 font-medium pb-1.5 border-b border-slate-200 dark:border-slate-800/80">
                   <span className="flex items-center gap-1 font-bold text-slate-800 dark:text-slate-200 text-xs">
                     <ShieldCheck className="w-4 h-4 text-emerald-500" />
                     Clean Preview ({totalPages} {totalPages > 1 ? 'Pages' : 'Page'})
@@ -861,7 +859,7 @@ Confidential Note: Cleared background verification for rental lease.`;
                   <div
                     ref={scrollContainerRef}
                     onScroll={handleContainerScroll}
-                    className="rounded-xl overflow-y-auto max-h-[460px] p-2.5 space-y-3 bg-slate-100/70 dark:bg-[#07090f] border border-slate-200 dark:border-slate-800 shadow-inner"
+                    className="rounded-xl overflow-y-auto max-h-[380px] p-2 space-y-2.5 bg-slate-100/70 dark:bg-[#07090f] border border-slate-200 dark:border-slate-800 shadow-inner"
                   >
                     {previewPages.map((imgSrc, idx) => (
                       <div
@@ -870,7 +868,7 @@ Confidential Note: Cleared background verification for rental lease.`;
                         className="space-y-1 flex flex-col items-center"
                       >
                         {previewPages.length > 1 && (
-                          <div className="flex items-center justify-between w-full px-1 text-[9.5px] text-slate-500 dark:text-slate-400 font-semibold font-mono">
+                          <div className="flex items-center justify-between w-full px-1 text-[9px] text-slate-500 dark:text-slate-400 font-semibold font-mono">
                             <span className="px-1.5 py-0.5 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700/80 shadow-xs">
                               📄 Page {idx + 1} of {totalPages}
                             </span>
@@ -891,14 +889,14 @@ Confidential Note: Cleared background verification for rental lease.`;
                     ))}
                   </div>
                 ) : (
-                  <div className="p-3 bg-slate-50 dark:bg-slate-950 rounded-xl font-mono text-xs text-slate-800 dark:text-slate-200 whitespace-pre-wrap max-h-[420px] overflow-y-auto">
+                  <div className="p-3 bg-slate-50 dark:bg-slate-950 rounded-xl font-mono text-xs text-slate-800 dark:text-slate-200 whitespace-pre-wrap max-h-[350px] overflow-y-auto">
                     {uploadResult.masked_text || 'No preview available.'}
                   </div>
                 )}
 
                 {/* Primary Download Bar */}
-                <div className="flex flex-col sm:flex-row items-center justify-between gap-2.5 pt-1.5">
-                  <span className="text-[10.5px] text-slate-500">
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-2 pt-1">
+                  <span className="text-[10px] text-slate-500">
                     Surgically redacted with style <strong>{maskingMode}</strong>.
                   </span>
 
@@ -922,7 +920,7 @@ Confidential Note: Cleared background verification for rental lease.`;
             </div>
 
             {/* Right Column: AI Assistant & Security Verification (5 cols) */}
-            <div className="lg:col-span-5 space-y-3">
+            <div className="lg:col-span-5 space-y-2.5">
               
               <div className="flex items-center space-x-1 bg-slate-200/70 dark:bg-slate-900 p-1 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-semibold">
                 <button
@@ -953,7 +951,7 @@ Confidential Note: Cleared background verification for rental lease.`;
               </div>
 
               {outputTab === 'preview' && (
-                <div className="space-y-3">
+                <div className="space-y-2">
                   <RiskIndicator
                     riskAssessment={uploadResult.risk_assessment}
                     processingTimeMs={uploadResult.processing_time_ms}
@@ -961,12 +959,12 @@ Confidential Note: Cleared background verification for rental lease.`;
                     zeroLeakVerified={uploadResult.zero_leak_verified}
                   />
 
-                  <div className="glass-card rounded-2xl p-3.5 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 space-y-1.5 text-xs">
+                  <div className="glass-card rounded-2xl p-3 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 space-y-1 text-xs">
                     <h4 className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
                       <Sparkles className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400" />
                       Sanitization Summary
                     </h4>
-                    <p className="text-slate-500 dark:text-slate-400 text-[11px]">
+                    <p className="text-slate-500 dark:text-slate-400 text-[10.5px]">
                       Total <strong>{uploadResult.detected_pii?.length || 0}</strong> sensitive identifiers detected. Applied <strong>{maskingMode}</strong> masking in memory with 0ms disk retention.
                     </p>
                   </div>

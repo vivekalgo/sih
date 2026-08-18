@@ -250,7 +250,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-[#07090e] text-slate-800 dark:text-slate-100 flex flex-col font-sans relative scanline transition-colors duration-200">
+    <div className="h-[100dvh] bg-slate-50 dark:bg-[#07090e] text-slate-800 dark:text-slate-100 flex flex-col font-sans relative scanline transition-colors duration-200 overflow-hidden">
       
       {/* Top Navbar */}
       <Navbar
@@ -278,8 +278,8 @@ export default function App() {
         </div>
       )}
 
-      {/* Main Content Area */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-3 sm:py-6 space-y-4 sm:space-y-6">
+      {/* Main Content Area (Flex container fitting exactly inside viewport) */}
+      <main className="flex-1 min-h-0 max-w-7xl w-full mx-auto px-2.5 sm:px-6 lg:px-8 py-2 sm:py-3 flex flex-col overflow-hidden">
         
         {/* Error Alert */}
         {errorMsg && (
