@@ -158,38 +158,40 @@ export default function FloatingChatWidget({ hasDocument, filename = 'document.p
             {history.map((msg, idx) => (
               <div
                 key={idx}
-                className={`flex flex-col space-y-1 ${
+                className={`flex flex-col ${
                   msg.role === 'user' ? 'items-end' : 'items-start'
                 }`}
               >
-                <span className="text-[10px] text-slate-500 font-semibold uppercase tracking-wider px-1">
-                  {msg.role === 'user' ? 'You' : 'AI Assistant'}
-                </span>
-
                 <div
-                  className={`max-w-[88%] p-3 rounded-2xl text-xs leading-relaxed whitespace-pre-wrap shadow-2xs ${
+                  className={`max-w-[85%] p-3 rounded-2xl leading-relaxed text-xs shadow-xs ${
                     msg.role === 'user'
-                      ? 'bg-cyan-600 text-white rounded-br-none font-medium'
-                      : msg.isRefusal
-                      ? 'bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-700/60 text-amber-900 dark:text-amber-200 rounded-bl-none'
-                      : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 rounded-bl-none'
+                      ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-br-none'
+                      : msg.error
+                      ? 'bg-rose-50 dark:bg-rose-950/40 text-rose-800 dark:text-rose-200 border border-rose-200 dark:border-rose-800/60 rounded-bl-none'
+                      : 'bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-800 rounded-bl-none'
                   }`}
                 >
-                  {msg.content}
+                  <p className="whitespace-pre-wrap">{msg.content}</p>
 
-                  {msg.role === 'assistant' && !msg.error && (
-                    <div className="mt-2 pt-1.5 border-t border-slate-200/80 dark:border-slate-800 flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400">
-                      {msg.isRefusal ? (
-                        <span className="flex items-center gap-1 text-amber-600 dark:text-amber-400 font-semibold">
-                          <ShieldAlert className="w-3 h-3" />
-                          Document-only boundary
-                        </span>
-                      ) : (
-                        <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-semibold">
-                          <ShieldCheck className="w-3 h-3" />
-                          Document Verified
+                  {/* Grounded / Hallucination-Free Badge */}
+                  {msg.grounded && !msg.error && (
+                    <div className="mt-1.5 pt-1.5 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold">
+                      <span className="flex items-center gap-1">
+                        <ShieldCheck className="w-3 h-3" />
+                        Grounded in Document
+                      </span>
+                      {msg.isLiveGemini && (
+                        <span className="font-mono text-[9px] bg-cyan-100 dark:bg-cyan-950 text-cyan-800 dark:text-cyan-300 px-1.5 py-0.2 rounded border border-cyan-300 dark:border-cyan-700/40">
+                          Gemini 1.5
                         </span>
                       )}
+                    </div>
+                  )}
+
+                  {msg.isRefusal && (
+                    <div className="mt-1.5 pt-1.5 border-t border-amber-200 dark:border-amber-800/80 flex items-center space-x-1 text-[10px] text-amber-600 dark:text-amber-400 font-medium">
+                      <ShieldAlert className="w-3 h-3 flex-shrink-0" />
+                      <span>Security Refusal: Question is outside document context.</span>
                     </div>
                   )}
                 </div>
@@ -197,17 +199,16 @@ export default function FloatingChatWidget({ hasDocument, filename = 'document.p
             ))}
 
             {isLoading && (
-              <div className="flex items-center space-x-2 text-cyan-600 dark:text-cyan-400 text-xs py-1 px-2 font-medium">
-                <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                <span>Reading document & drafting answer...</span>
+              <div className="flex items-center space-x-2 text-xs text-slate-500 p-2">
+                <Loader2 className="w-4 h-4 animate-spin text-cyan-600 dark:text-cyan-400" />
+                <span>Reading document & grounding answer...</span>
               </div>
             )}
-
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Input Form */}
-          <div className="p-3 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800">
+          {/* Input Box */}
+          <div className="p-3 bg-white dark:bg-[#090d16] border-t border-slate-200 dark:border-slate-800">
             <form
               onSubmit={(e) => {
                 e.preventDefault();
@@ -232,7 +233,7 @@ export default function FloatingChatWidget({ hasDocument, filename = 'document.p
               </button>
             </form>
             <div className="mt-1.5 flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400 px-1">
-              <span>🔒 100% Private (Runs in temporary RAM)</span>
+              <span>🔒 100% Private (Runs in RAM)</span>
               <span>Gemini Grounded</span>
             </div>
           </div>
@@ -241,11 +242,12 @@ export default function FloatingChatWidget({ hasDocument, filename = 'document.p
       )}
 
       {/* 2. FLOATING ACTION BUTTON (FAB) TRIGGER */}
-      <div className="fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-40">
+      {/* On mobile, only show if document is loaded or in desktop view to prevent overlapping Step 1 Next button */}
+      <div className={`fixed bottom-24 right-4 sm:bottom-6 sm:right-6 z-40 ${!hasDocument ? 'hidden sm:flex' : 'flex'}`}>
         <button
           type="button"
           onClick={() => setIsOpen((prev) => !prev)}
-          className={`relative group flex items-center space-x-2 px-3 py-2 sm:px-4 sm:py-3 rounded-full shadow-2xl transition-all duration-300 ${
+          className={`relative group flex items-center space-x-2 p-2.5 sm:px-4 sm:py-3 rounded-full shadow-2xl transition-all duration-300 ${
             isOpen
               ? 'bg-slate-900 dark:bg-slate-800 text-white ring-2 ring-cyan-500/50 scale-95'
               : 'bg-gradient-to-r from-cyan-600 via-indigo-600 to-purple-600 text-white hover:scale-105 hover:shadow-cyan-500/30'
@@ -264,14 +266,14 @@ export default function FloatingChatWidget({ hasDocument, filename = 'document.p
           {isOpen ? (
             <>
               <X className="w-5 h-5 text-white" />
-              <span className="text-xs font-bold">Close</span>
+              <span className="text-xs font-bold hidden sm:inline">Close</span>
             </>
           ) : (
             <>
               <div className="relative">
                 <Bot className="w-5 h-5 text-white group-hover:rotate-6 transition-transform" />
               </div>
-              <div className="flex flex-col text-left">
+              <div className="hidden sm:flex flex-col text-left">
                 <span className="text-xs font-bold leading-tight flex items-center gap-1">
                   <span>Chat with File</span>
                   <Sparkles className="w-3 h-3 text-cyan-200" />

@@ -304,9 +304,9 @@ Confidential Note: Cleared background verification for rental lease.`;
   };
 
   return (
-    <div className="space-y-3 sm:space-y-5 animate-fade-in max-w-6xl mx-auto flex flex-col pb-20 sm:pb-0">
+    <div className="space-y-3 sm:space-y-5 animate-fade-in max-w-6xl mx-auto flex flex-col w-full">
       
-      {/* 1. TOP PROCESS STEPPER BAR (Compact & Sticky on mobile) */}
+      {/* 1. TOP PROCESS STEPPER BAR (Sticky on top) */}
       <div className="sticky top-16 z-30 bg-slate-50/95 dark:bg-[#07090e]/95 backdrop-blur-md pb-1">
         <StepProgress
           currentStep={currentStep}
@@ -319,7 +319,7 @@ Confidential Note: Cleared background verification for rental lease.`;
           STEP 1: SELECT PURPOSE / USE CASE
           ========================================================================= */}
       {currentStep === 1 && (
-        <div className="glass-card rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-xl bg-white/95 dark:bg-[#0b0f19]/90 overflow-hidden flex flex-col animate-fade-in">
+        <div className="glass-card rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-xl bg-white/95 dark:bg-[#0b0f19]/90 overflow-hidden flex flex-col animate-fade-in relative">
           
           {/* Step Header */}
           <div className="p-3.5 sm:p-4 pb-2 sm:pb-3 border-b border-slate-100 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-900/40 space-y-1">
@@ -340,8 +340,8 @@ Confidential Note: Cleared background verification for rental lease.`;
             </p>
           </div>
 
-          {/* Scrollable Purpose Grid Container (With bottom padding so cards scroll nicely above fixed button) */}
-          <div className="p-3 sm:p-4 overflow-y-auto max-h-[calc(100dvh-320px)] sm:max-h-[460px] space-y-2.5">
+          {/* Scrollable Purpose Grid Container with generous bottom padding so the last item is 100% visible */}
+          <div className="p-3 sm:p-4 pb-32 sm:pb-4 overflow-y-auto max-h-[calc(100dvh-280px)] sm:max-h-[460px] space-y-2.5">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3">
               {purposeOptions.map((opt) => {
                 const Icon = opt.icon;
@@ -395,10 +395,12 @@ Confidential Note: Cleared background verification for rental lease.`;
                 );
               })}
             </div>
+            {/* Additional bottom spacer for mobile scrolling clearance */}
+            <div className="h-6 sm:hidden" />
           </div>
 
-          {/* DOCKED / FIXED BOTTOM ACTION BAR (100% Fixed at bottom on Mobile, always in view!) */}
-          <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-[#0a0e19]/95 backdrop-blur-xl border-t border-slate-200 dark:border-slate-800 p-3 sm:p-4 sm:static sm:bg-slate-50/95 sm:dark:bg-[#0c101a]/95 sm:rounded-b-3xl shadow-[0_-8px_25px_rgba(0,0,0,0.12)] sm:shadow-none flex items-center justify-between gap-3">
+          {/* DOCKED / FIXED BOTTOM ACTION BAR (100% Fixed at bottom of viewport on mobile) */}
+          <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/98 dark:bg-[#0a0e19]/98 backdrop-blur-xl border-t border-slate-200 dark:border-slate-800 p-3 sm:p-4 sm:static sm:bg-slate-50/95 sm:dark:bg-[#0c101a]/95 sm:rounded-b-3xl shadow-[0_-10px_30px_rgba(0,0,0,0.15)] sm:shadow-none flex items-center justify-between gap-3">
             <div className="text-xs text-slate-600 dark:text-slate-400 hidden sm:flex items-center gap-1.5">
               <span>Selected Purpose:</span>
               <strong className="text-cyan-600 dark:text-cyan-400 font-bold px-2 py-0.5 rounded bg-cyan-50 dark:bg-cyan-950/80 border border-cyan-300 dark:border-cyan-700/50">
@@ -409,7 +411,7 @@ Confidential Note: Cleared background verification for rental lease.`;
             <button
               type="button"
               onClick={() => setCurrentStep(2)}
-              className="w-full sm:w-auto ml-auto px-6 sm:px-8 py-3 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold text-xs sm:text-sm shadow-lg shadow-cyan-600/25 flex items-center justify-center space-x-2 transition-all active:scale-95"
+              className="w-full sm:w-auto ml-auto px-6 sm:px-8 py-3.5 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold text-xs sm:text-sm shadow-xl shadow-cyan-600/30 flex items-center justify-center space-x-2 transition-all active:scale-95"
             >
               <span>Next: Upload Document</span>
               <ArrowRight className="w-4 h-4" />
@@ -423,7 +425,7 @@ Confidential Note: Cleared background verification for rental lease.`;
           STEP 2: UPLOAD DOCUMENT / TEXT
           ========================================================================= */}
       {currentStep === 2 && (
-        <div className="glass-card rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-xl bg-white/95 dark:bg-[#0b0f19]/90 overflow-hidden flex flex-col animate-fade-in max-w-4xl mx-auto w-full">
+        <div className="glass-card rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-xl bg-white/95 dark:bg-[#0b0f19]/90 overflow-hidden flex flex-col animate-fade-in max-w-4xl mx-auto w-full relative">
           
           {/* Step Header */}
           <div className="p-3.5 sm:p-4 pb-2 sm:pb-3 border-b border-slate-100 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-900/40 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
@@ -443,7 +445,7 @@ Confidential Note: Cleared background verification for rental lease.`;
           </div>
 
           {/* Upload Area Scroll Container */}
-          <div className="p-3.5 sm:p-5 overflow-y-auto max-h-[calc(100dvh-320px)] sm:max-h-[460px] space-y-3.5">
+          <div className="p-3.5 sm:p-5 pb-32 sm:pb-5 overflow-y-auto max-h-[calc(100dvh-280px)] sm:max-h-[460px] space-y-3.5">
             
             {/* Mode Switcher */}
             <div className="flex items-center space-x-2 bg-slate-100 dark:bg-slate-900/90 p-1 rounded-xl border border-slate-200 dark:border-slate-800 w-fit shadow-sm">
@@ -568,7 +570,7 @@ Confidential Note: Cleared background verification for rental lease.`;
           </div>
 
           {/* DOCKED / FIXED BOTTOM ACTION BAR */}
-          <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-[#0a0e19]/95 backdrop-blur-xl border-t border-slate-200 dark:border-slate-800 p-3 sm:p-4 sm:static sm:bg-slate-50/95 sm:dark:bg-[#0c101a]/95 sm:rounded-b-3xl shadow-[0_-8px_25px_rgba(0,0,0,0.12)] sm:shadow-none flex items-center justify-between gap-3">
+          <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/98 dark:bg-[#0a0e19]/98 backdrop-blur-xl border-t border-slate-200 dark:border-slate-800 p-3 sm:p-4 sm:static sm:bg-slate-50/95 sm:dark:bg-[#0c101a]/95 sm:rounded-b-3xl shadow-[0_-10px_30px_rgba(0,0,0,0.15)] sm:shadow-none flex items-center justify-between gap-3">
             <button
               type="button"
               onClick={() => setCurrentStep(1)}
@@ -590,7 +592,7 @@ Confidential Note: Cleared background verification for rental lease.`;
           STEP 3: CHOOSE REDACTION & MASKING OPTIONS
           ========================================================================= */}
       {currentStep === 3 && uploadResult && (
-        <div className="glass-card rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-xl bg-white/95 dark:bg-[#0b0f19]/90 overflow-hidden flex flex-col animate-fade-in max-w-5xl mx-auto w-full">
+        <div className="glass-card rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-xl bg-white/95 dark:bg-[#0b0f19]/90 overflow-hidden flex flex-col animate-fade-in max-w-5xl mx-auto w-full relative">
           
           {/* Step Header */}
           <div className="p-3.5 sm:p-4 pb-2 sm:pb-3 border-b border-slate-100 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-900/40 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
@@ -608,7 +610,7 @@ Confidential Note: Cleared background verification for rental lease.`;
           </div>
 
           {/* Masking Options Scroll Container */}
-          <div className="p-3 sm:p-4 overflow-y-auto max-h-[calc(100dvh-320px)] sm:max-h-[460px] space-y-3.5">
+          <div className="p-3 sm:p-4 pb-32 sm:pb-4 overflow-y-auto max-h-[calc(100dvh-280px)] sm:max-h-[460px] space-y-3.5">
             
             {/* 1. Masking Strategy Selector */}
             <div className="space-y-1.5">
@@ -728,7 +730,7 @@ Confidential Note: Cleared background verification for rental lease.`;
           </div>
 
           {/* DOCKED / FIXED BOTTOM ACTION BAR */}
-          <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-[#0a0e19]/95 backdrop-blur-xl border-t border-slate-200 dark:border-slate-800 p-3 sm:p-4 sm:static sm:bg-slate-50/95 sm:dark:bg-[#0c101a]/95 sm:rounded-b-3xl shadow-[0_-8px_25px_rgba(0,0,0,0.12)] sm:shadow-none flex items-center justify-between gap-3">
+          <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/98 dark:bg-[#0a0e19]/98 backdrop-blur-xl border-t border-slate-200 dark:border-slate-800 p-3 sm:p-4 sm:static sm:bg-slate-50/95 sm:dark:bg-[#0c101a]/95 sm:rounded-b-3xl shadow-[0_-10px_30px_rgba(0,0,0,0.15)] sm:shadow-none flex items-center justify-between gap-3">
             <button
               type="button"
               onClick={() => setCurrentStep(2)}
@@ -742,7 +744,7 @@ Confidential Note: Cleared background verification for rental lease.`;
               type="button"
               onClick={handleGenerateFinalOutput}
               disabled={isRedacting}
-              className="px-5 sm:px-8 py-3 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold text-xs sm:text-sm shadow-lg shadow-cyan-600/25 flex items-center justify-center space-x-1.5 transition-all active:scale-95"
+              className="px-5 sm:px-8 py-3.5 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold text-xs sm:text-sm shadow-xl shadow-cyan-600/30 flex items-center justify-center space-x-1.5 transition-all active:scale-95"
             >
               {isRedacting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Eye className="w-4 h-4" />}
               <span>Generate Clean Document</span>
@@ -794,7 +796,7 @@ Confidential Note: Cleared background verification for rental lease.`;
           </div>
 
           {/* 2-Column Split Workspace */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 pb-24 sm:pb-0">
             
             {/* Left Column: Multi-page Visual Document Preview (7 cols) */}
             <div className="lg:col-span-7 space-y-3">
