@@ -152,25 +152,44 @@ Return a strict JSON array of objects matching this exact schema:
 ]
 """
 
-        model = genai.GenerativeModel(
-            model_name=settings.GEMINI_MODEL,
-            system_instruction=system_instruction,
-            generation_config={
-                "response_mime_type": "application/json",
-                "temperature": 0.1
-            }
-        )
+        candidate_models = [settings.GEMINI_MODEL, "gemini-1.5-flash", "gemini-2.0-flash", "gemini-1.5-flash-8b"]
+        # Remove duplicates while preserving order
+        unique_models = []
+        for m in candidate_models:
+            if m and m not in unique_models:
+                unique_models.append(m)
 
-        # Fast text-only payload with strict timeout to prevent multi-minute network hangs
-        response = model.generate_content([prompt], request_options={"timeout": 6.0})
-        raw_output = response.text.strip() if response and response.text else "[]"
+        raw_output = ""
+        for model_name in unique_models:
+            try:
+                model = genai.GenerativeModel(
+                    model_name=model_name,
+                    system_instruction=system_instruction,
+                    generation_config={
+                        "response_mime_type": "application/json",
+                        "temperature": 0.1
+                    }
+                )
+                response = model.generate_content([prompt], request_options={"timeout": 6.0})
+                if response and response.text:
+                    raw_output = response.text.strip()
+                    break
+            except Exception as model_err:
+                print(f"[GeminiCopilot] Model {model_name} attempt failed: {model_err}")
+                continue
+
+        if not raw_output:
+            return None
         
         # Clean markdown code blocks if any
         if raw_output.startswith("```"):
             raw_output = re.sub(r"^```(?:json)?\s*", "", raw_output)
             raw_output = re.sub(r"\s*```$", "", raw_output)
 
-        parsed = json.loads(raw_output)
+        try:
+            parsed = json.loads(raw_output)
+        except Exception:
+            return None
         
         results: List[PIIAnalysisItem] = []
         if isinstance(parsed, list):

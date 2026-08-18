@@ -23,14 +23,14 @@ export default function App() {
   const [isZeroModalOpen, setIsZeroModalOpen] = useState(false);
   const [purgeToast, setPurgeToast] = useState(null);
 
-  // Theme Management (Dark / Light) with persistence
+  // Theme Management (Default: Light Mode)
   const [theme, setTheme] = useState(() => {
     try {
       const savedTheme = localStorage.getItem('privacyguard_theme');
       if (savedTheme === 'light' || savedTheme === 'dark') return savedTheme;
-      return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      return 'light';
     } catch {
-      return 'dark';
+      return 'light';
     }
   });
 
