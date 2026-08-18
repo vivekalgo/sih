@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/:match*",
-      "destination": "https://privacyguard-backend-91tl.onrender.com/api/:match*"
+      "destination": "https://sih-wn3v.onrender.com/api/:match*"
     },
     {
       "source": "/(.*)",
