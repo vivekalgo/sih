@@ -347,8 +347,8 @@ export default function App() {
         uploadedFile={uploadedFile}
       />
 
-      {/* Footer */}
-      <footer className="border-t border-slate-200 dark:border-slate-800/80 bg-white dark:bg-[#090c14] py-6 text-center text-xs text-slate-500 dark:text-slate-400 transition-colors duration-200">
+      {/* Footer (Hidden on mobile for native app screen-fit experience) */}
+      <footer className="hidden sm:block border-t border-slate-200 dark:border-slate-800/80 bg-white dark:bg-[#090c14] py-6 text-center text-xs text-slate-500 dark:text-slate-400 transition-colors duration-200">
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center space-x-2">
             <ShieldCheck className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
